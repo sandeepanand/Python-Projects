@@ -16,7 +16,7 @@ google_news = GNews()
 # In[39]:
 
 
-list_of_entries = ['Joby Aviation','Capula Investment', 'Mafika Engineering', 'ShineWing']
+list_of_entries = ['Tesla','Microsoft']
 
 
 # In[53]:
