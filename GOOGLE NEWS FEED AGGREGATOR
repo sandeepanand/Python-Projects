@@ -1,0 +1,66 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# # <span style="color:#6E2B62"> <b>GOOGLE NEWS FEED AGGREGATOR </b> </span>
+
+# #### <span style="color:#6E2B62"> <b><a>https://github.com/ranahaani/GNews/blob/master/README.md</a></b> </span>
+
+# In[38]:
+
+
+from gnews import GNews
+import pandas as pd
+google_news = GNews()
+
+
+# In[39]:
+
+
+list_of_entries = ['Joby Aviation','Capula Investment', 'Mafika Engineering', 'ShineWing']
+
+
+# In[53]:
+
+
+Result_df = pd.DataFrame()
+for i in list_of_entries:
+    #print(i)
+    try:
+        print(i)
+        google_news = GNews(language='en',period='7d')
+        temp_list= google_news.get_news(i)
+        temp_df = pd.DataFrame(temp_list)
+        temp_df['publisher_href'] = temp_df['publisher'].apply(lambda x: x['href'])
+        temp_df['publisher_title'] = temp_df['publisher'].apply(lambda x: x['title'])
+        # Drop the original 'publisher' column
+        temp_df = temp_df.drop(columns=['publisher'])
+        temp_df['date'] = pd.to_datetime(temp_df['published date'], format='%a, %d %b %Y %H:%M:%S %Z')
+        temp_df['date'] = temp_df['date'].dt.strftime('%m-%d-%Y')
+        temp_df['Topic']= i
+        #print(temp_df)
+        Result_df = pd.concat([temp_df,Result_df], axis=0)
+    except:
+        print("Issue with topic")
+        print(i)
+    finally:
+        print('Execution Successfull')
+    
+
+
+# In[55]:
+
+
+Result_df.head()
+
+
+# In[56]:
+
+
+Result_df.shape
+
+
+# In[57]:
+
+
+Result_df.to_excel('Output/Business.xlsx',index=False)
+
